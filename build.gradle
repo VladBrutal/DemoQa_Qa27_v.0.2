@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+}
+
+group 'com.telran'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.testng:testng:7.1.0'
+    implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+}
+
+test {
+    useTestNG()
+}
+
+task reg(type: Test){
+
+    useTestNG{
+
+        def groups = System.getProperty('groups')
+        if (groups != null) {
+            includeGroups groups
+        }
+
+        def suite = System.getProperty('suite', '')
+
+        if (suite.equals('quick')) {
+            suites 'src/test/resources/quick.xml'
+        } else if (suite.equals('smoke')) {
+            suites 'src/test/resources/smoke.xml'
+        } else {
+            suites 'src/test/resources/testing.xml'
+        }
+
+        if(project.hasProperty('browser')){
+            systemProperty 'browser', "${browser}"
+        }
+
+    }
+
+
+}
+
+
+
+
