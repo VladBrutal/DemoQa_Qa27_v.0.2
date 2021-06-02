@@ -1,0 +1,3 @@
+7158 [Test worker] INFO  TestBase - Start method -->quicktest
+7163 [Test worker] INFO  TestBase - Passed quick
+7169 [Test worker] INFO  TestBase - End of method -->quicktest

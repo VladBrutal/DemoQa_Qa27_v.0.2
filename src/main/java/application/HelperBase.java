@@ -24,7 +24,6 @@ public class HelperBase {
 
     public void click(By locator) {
         wd.findElement(locator).click();
-
     }
 
 
@@ -61,6 +60,7 @@ public class HelperBase {
 
     public void selectByValue(By locator, String value) {
         new Select(wd.findElement(locator)).selectByValue(value);
-
     }
+
+
 }

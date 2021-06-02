@@ -21,7 +21,7 @@ public class FormTest extends TestBase{
               .withEmail("alexenglish@gmail.com")
               .withGender("Male") // radioButton
               .withPhone("1234556765")
-              .withBirthday("10 01 1979") // parse parameters
+              .withBirthday("29 Apr 1979") // parse parameters
               .withSubject("Maths") // autoComplite form
               .withHobbies("Sports Reading") // checkBox
               .withAddress("Haifa, Hazir Bar str. 12")
@@ -30,8 +30,9 @@ public class FormTest extends TestBase{
 
         app.form().submit();
         Assert.assertTrue(app.form().isDialogDisplayed());
-        Assert.assertTrue(app.form().isCloseButtonLocated());
+        Assert.assertFalse(app.form().isCloseButtonLocated());
         app.form().closeDialog();
+        logger.info("Car was created");
     }
 
 

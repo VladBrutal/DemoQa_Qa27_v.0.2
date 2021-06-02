@@ -6,6 +6,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
@@ -134,33 +135,87 @@ public class HelperForm extends HelperBase {
         WebElement bDay = wd.findElement(By.id("dateOfBirthInput"));
         bDay.click();
 
-        String [] numbers = bday.split(" ");
-        int n = Integer.parseInt(numbers[1]);
-        String month = Integer.toString(--n);
+        // Checking format of the month in string (letters or numbers)
+        String [] dates = bday.split(" ");
+        String exactMonth = null;
+        List<WebElement> options = wd.findElements(By.xpath("//select[@class='react-datepicker__month-select']"));
+        for (WebElement option : options) {
+            if (option.getText().contains(dates[1])) {
+                exactMonth = option.getText();
+                break;
+                /*option.click();
+                break;*/
+            }
+        }
+        System.out.println(exactMonth);
+        new Select(wd.findElement
+                (By.xpath("//select[@class='react-datepicker__month-select']")))
+                .selectByVisibleText(exactMonth);
+
+
 
         // click by text box bday
         // select month
-        selectByIndex(By.xpath("//select[@class='react-datepicker__month-select']"), month);
+
         // select year
-        selectByValue(By.xpath("//select[@class='react-datepicker__year-select']"), numbers[2]);
+        selectByValue(By.xpath("//select[@class='react-datepicker__year-select']"), dates[2]);
         // select day
-        pickUpDayFromTable(By.xpath("//div[@class='react-datepicker__month']/div/div"), numbers[0]);
+        pickUpDayFromTable(By.xpath("//div[@class='react-datepicker__month']/div/div"), dates[0]);
 
     }
 
+    private void selectMonthByText(By locator, String month) {
+        //Checking if we receiving mane of the month in format of 3 letters (exp: Mar, Apr ect.)
+        List<WebElement> nameOfMonths = wd.findElements(locator);
+        for (WebElement el : nameOfMonths){
+            String subMonth = el.getText().substring(0,2);
+            if (subMonth.contains(month)){
+                new Select(wd.findElement(locator)).selectByVisibleText(el.getText());
+            }
+        }
+    }
 
 
     private void pickUpDayFromTable(By locator, String number) {
         List<WebElement> days = wd.findElements(locator);
         for (WebElement day : days){
-            if (day.getText().equals(number)){
-                day.click();
-                break;
-            }
-        }
 
+        }
     }
 
+    private void selectBDay3(String bDay) {
+        String[] date = bDay.split(" ");
+        click(By.id("dateOfBirthInput"));
+        new Select(wd.findElement(By.xpath("//select[@class='react-datepicker__month-select']"))).selectByVisibleText(date[1]);
+        new Select(wd.findElement(By.xpath("//select[@class='react-datepicker__year-select']"))).selectByVisibleText(date[2]);
+        List<WebElement> ar = wd.findElements(By.xpath("//div[text()='" + date[0] + "']"));
+        for (WebElement el : ar) {
+            if (el.getAttribute("aria-label").contains(date[1])) {
+                el.click();
+            }
+        }
+    }
 
+    private void selectBday4(String bDay){
+        String [] date = bDay.split(" ");
+        click(By.id("dateOfBirthInput"));
 
+        new Select(wd.findElement(By.xpath("//select[@class='react-datepicker__month-select']"))).selectByVisibleText(date[1]);
+        new Select(wd.findElement(By.xpath("//select[@class='react-datepicker__year-select']"))).selectByVisibleText(date[2]);
+
+        int day = Integer.parseInt(date[0]);
+        List<WebElement> days = wd.findElements(By.xpath(String.format("//div[text()='%s']", date[0])));
+        WebElement element;
+        if (days.size()>1 && day > 15){
+            element=days.get(1);
+        }else {
+            element=days.get(0);
+        }
+        element.click();
+
+    }
 }
+
+
+
+

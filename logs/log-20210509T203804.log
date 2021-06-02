@@ -1,0 +1,3 @@
+20:38:10 6520 [Test worker] INFO  TestBase - Start method -->quicktest
+20:38:10 6525 [Test worker] INFO  TestBase - Passed quick
+20:38:10 6530 [Test worker] INFO  TestBase - End of method -->quicktest
